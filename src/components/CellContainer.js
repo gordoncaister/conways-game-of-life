@@ -1,17 +1,33 @@
 import React,{useState, useEffect} from 'react';
 import {Cell} from "./Cell"
 
-let mutation=0;
+
+const possibilities = [
+    [-1,-1],
+    [-1,0],
+    [-1,1],
+    [0,1],
+    [1,1],
+    [1,0],
+    [1,-1],
+    [0,-1],
+]
+// NW  N   NE
+// E   C   W
+// SE  S   SW
 
 export function CellContainer() {
+
     let cols = 10;
     let rows = 10;
 
-    const startGrid = (cols,rows)=> {
+    
 
-        let arr = new Array(cols);
+    const startGrid = (rows,cols)=> {
+
+        let arr = new Array(rows);
         for(let i = 0; i < arr.length; i++){
-            arr[i] = new Array(rows);
+            arr[i] = new Array(cols);
             for(let j = 0; j < rows; j++){
                 arr[i][j] = 0
             }
@@ -19,39 +35,78 @@ export function CellContainer() {
         return arr;
     }
 
-    let [grid,setGrid] = useState(startGrid(cols, rows))
-    let [next,setNext] = useState(startGrid(cols, rows))
+    let [grid,setGrid] = useState(startGrid(rows, cols))
+    let [next,setNext] = useState(startGrid(rows, cols))
+    let [running, setRunning] = useState(false)
+    let [mutation, setMutation] = useState(0)
     
+    const onStart = () => {
+        console.log("onStart")
+        if (!running){
+            return;
+        };
+        let tempGrid = [...grid];
 
-    const onCellClick = (col,row)=>{
+        setMutation(mutation+1);
+        
+        for(let i = 0; i < rows; i++){
+            for(let j = 0; j < cols; j++){
+                let neighbours = 0;
+                possibilities.forEach(([x,y])=> {
+                    const nextI = i + x;
+                    const nextJ = j + y;
+                    if(nextI >= 0 && nextI<rows && nextJ >= 0 && nextJ < cols){
+                        neighbours += grid[nextI][nextJ] 
+                    }
+                });
+                console.log(`${i},${j}: neighbours: ${neighbours}`)
+                if (neighbours<2 || neighbours>3){
+                    tempGrid[i][j] =  0;
+                } else if (grid[i][j] === 0 && neighbours === 3) {
+                    tempGrid[i][j] = 1;
+                }
+            };
+        }  
+        
+        
+        
+        setNext(tempGrid)
+    }
+
+    const onCellClick = (row, col)=>{
         let tempGrid = [...grid]
         
-        if(tempGrid[col][row]){
-            console.log("was one,now zero")
-            tempGrid[col][row] = 0
+        if(tempGrid[row][col]){
+            tempGrid[row][col] = 0
         } else {
-            console.log("was zero,now one")
-            tempGrid[col][row] = 1
-            console.log(tempGrid[col][row])
+            tempGrid[row][col] = 1
         }
-        console.log("TEMPGRID:", tempGrid)
         setNext(tempGrid)
         
     }
 
+    const start = () => {
+        console.log("starting")
+        setRunning(true)
+        onStart()
+        // setInterval(() => onStart(),500)
+    }
+    
+
     useEffect(()=>{
         setGrid(next)
     },[next])
-
+    
     return (
         <>
             <h3>Hello CellContainer</h3>
+            <button onClick={start}>Start</button>
+            <h5>{mutation}</h5>
             <div className="cell-container" style={{width:`${cols*18}px`}}>
                 {
-                    grid.map((rows,i) => {
-                        console.log("render",grid[0][0])
+                    grid.map((cols,i) => {
                         return (
-                            rows.map((cols,j) => {
+                            cols.map((rows,j) => {
                                 
                                 let id = `${i}-${j}`
                                 let cellclass = grid[i][j] ? "cell alive" : "cell dead"
