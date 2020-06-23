@@ -88,6 +88,9 @@ export function CellContainer() {
     onStart()
     setRunning(true)
   }
+  const step = () => {
+    onStart()
+  }
   const stop = () => {
     setRunning(false)
   }
@@ -184,7 +187,8 @@ export function CellContainer() {
       start={start} 
       stop={stop} 
       random={random} 
-      clear={clear}/>
+      clear={clear}
+      step={step}/>
       <div className="cell-container" style={{width:`${cols*18}px`}}>
         {
           grid.map((cols,i) => {

@@ -5,7 +5,7 @@ import Rules from "./components/Rules"
 function App() {
   return (
     <div className="App">
-      <p>Hello</p>
+      <h1 style={{margin: "0 auto", textAlign: "center"}}>Conway's Game of Life</h1>
       <CellContainer/>
       <Rules/>
     </div>

@@ -10,6 +10,14 @@ body {
   line-height: 0;
   margin: 0 auto;
 }
+.cockpit {
+  margin: 0 auto;
+  text-align: center;
+  padding-bottom: 2rem;
+}
+.rules {
+  text-align: center;
+}
 
 .cell {
   display: inline-block;

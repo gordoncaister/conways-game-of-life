@@ -7,6 +7,7 @@ function Cockpit(props) {
         <button onClick={props.random}>Random</button>
         <button onClick={props.clear}>Clear</button>
         <button onClick={props.pulsar}>Pulsar presets</button>
+        <button onClick={props.step}>Step</button>
       </div>
     );
   }
