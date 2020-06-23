@@ -169,7 +169,7 @@ export function CellContainer() {
 
   useEffect(()=>{
     if(running){
-      setTimeout(() => onStart(),50 )
+      setTimeout(() => onStart(),100 )
     }
     
   },[onStart, running, grid])
